@@ -1,0 +1,4 @@
+name: TestPlugin
+version: 0.0.1
+author: Archer
+main: main.java.Main
