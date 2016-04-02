@@ -16,6 +16,21 @@ commands:
     aliases: [homeset]
     permission: homes.set
 permissions:
+  homes.*:
+    description: Grants access to ALL Homes commands
+    children:
+      homes.tp.self: true
+      homes.tp.other: true
+      homes.set: true
+      homes.invite: true
+      homes.admin: true
+  homes.player:
+    description: Grants access to all commands intended for players
+    children:
+      homes.tp.self: true
+      homes.tp.other: true
+      homes.set: true
+      homes.invite: true
   homes.tp.self:
     description: Allows teleporting to own home.
     default: true
@@ -26,8 +41,8 @@ permissions:
     description: Allows setting location of home.
     default: true
   homes.invite:
-    description: Allows invitation and uninvition of other players.
+    description: Allows invitation and uninvitation of other players.
     default: true
   homes.admin:
-    description: Grants admin permissions.
+    description: Grants access to all administrative commands.
     default: op
