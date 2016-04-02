@@ -29,7 +29,7 @@ public class CommandSetHome implements CommandExecutor {
         if(sender instanceof Player){
             Player player = (Player) sender;
 
-            if(main.resEnabled) {
+            if(main.resEnabled || !player.hasPermission("homes.admin")) {
                 Location loc = player.getLocation();
                 ClaimedResidence res = Residence.getResidenceManager().getByLoc(loc);
                 if (!(res == null)) {
