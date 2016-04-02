@@ -1,3 +1,4 @@
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,9 +23,9 @@ public class CommandHome implements CommandExecutor {
     private boolean blackListed(String string) {
         boolean blackListed = false;
         String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp"};
-        for(int i = 0; i < blackList.length ; i++)
-            if(blackList[i].equalsIgnoreCase(string))
-                blackListed=true;
+        for (int i = 0; i < blackList.length; i++)
+            if (blackList[i].equalsIgnoreCase(string))
+                blackListed = true;
         return blackListed;
     }
 
@@ -49,7 +50,7 @@ public class CommandHome implements CommandExecutor {
 
                     // /home help
                     if (args[0].equals("help")) {
-                        if(player.hasPermission("homes.admin"))
+                        if (player.hasPermission("homes.admin"))
                             helpAdmin();
                         else
                             help();
@@ -103,7 +104,7 @@ public class CommandHome implements CommandExecutor {
                     }
 
                     // /home <player>
-                    else if(permCheck("homes.tp.other") && !blackListed(args[0])) {
+                    else if (permCheck("homes.tp.other") && !blackListed(args[0])) {
                         homeOther(args[0]);
                     }
                 }
@@ -115,26 +116,25 @@ public class CommandHome implements CommandExecutor {
     }
 
     public boolean home() {
-
-
-        for (int i = 0; i < data.size(); i++) {
-            if (player.getUniqueId().equals(UUID.fromString(data.get(i).getId()))) {
-                player.teleport(data.get(i).toLocation(player.getWorld()));
+        HomeInfo home = getHome(player);
+        if (!(home == null)) {
+            Location loc = home.toLocation();
+            if (!home.isObsolete()) {
+                player.teleport(loc);
                 player.sendMessage(Messages.HOME_SELF.parse());
                 return true;
             }
+            player.sendMessage(Messages.HOME_OBSOLETE.parse());
+            clear(home);
+            return true;
         }
         player.sendMessage(Messages.HOME_NOT_SET.parse());
-
-
         return true;
-
-
     }
 
     public boolean homeOther(String other) {
 
-        if(other.equalsIgnoreCase(player.getName())){
+        if (other.equalsIgnoreCase(player.getName())) {
             home();
             return true;
         }
@@ -144,14 +144,20 @@ public class CommandHome implements CommandExecutor {
         if (!(otherHome == null)) {
             String name = otherHome.getInviteName(player);
             if (!(name == null)) {
-                player.teleport(otherHome.toLocation(player.getWorld()));
-                player.sendMessage(Messages.HOME_OTHER.parse(otherHome.getName()));
+                Location loc = otherHome.toLocation();
+                if (!otherHome.isObsolete()) {
+                    player.teleport(loc);
+                    player.sendMessage(Messages.HOME_OTHER.parse(otherHome.getName()));
 
-                Player otherPlayer = getPlayer(other);
-                if (!(otherPlayer == null)) {
-                    otherPlayer.sendMessage(Messages.HOME_OTHER_TO_SELF.parse(player.getName()));
-                    return true;
+                    Player otherPlayer = getPlayer(other);
+                    if (!(otherPlayer == null)) {
+                        otherPlayer.sendMessage(Messages.HOME_OTHER_TO_SELF.parse(player.getName()));
+                        return true;
+                    }
                 }
+                player.sendMessage(Messages.HOME_OBSOLETE.parse());
+                clear(otherHome);
+                return true;
             }
             player.sendMessage(Messages.HOME_NOT_INVITED.parse(otherHome.getName()));
             return true;
@@ -163,7 +169,7 @@ public class CommandHome implements CommandExecutor {
 
     public boolean invite(String other) {
 
-        if(other.equalsIgnoreCase(player.getName())){
+        if (other.equalsIgnoreCase(player.getName())) {
             player.sendMessage(Messages.HOME_INVITE_SELF.parse());
             return true;
         }
@@ -174,7 +180,7 @@ public class CommandHome implements CommandExecutor {
             HomeInfo home = getHome(player);
             if (!(home == null)) {
 
-                if(home.isInvited(otherPlayer)){
+                if (home.isInvited(otherPlayer)) {
                     player.sendMessage(Messages.HOME_OTHER_INVITED.parse(otherPlayer.getName()));
                     return true;
                 }
@@ -193,7 +199,7 @@ public class CommandHome implements CommandExecutor {
 
     public boolean uninvite(String other) {
 
-        if(other.equalsIgnoreCase(player.getName())){
+        if (other.equalsIgnoreCase(player.getName())) {
             player.sendMessage(Messages.HOME_UNINVITE_SELF.parse());
             return true;
         }
@@ -248,9 +254,9 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
-    public boolean clear(String other){
+    public boolean clear(String other) {
         HomeInfo home = getHome(other);
-        if(!(home==null)){
+        if (!(home == null)) {
             data.remove(home);
             player.sendMessage(Messages.HOME_CLEAR.parse(other));
             return true;
@@ -259,7 +265,13 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
-    public boolean version(){
+    public boolean clear(HomeInfo home) {
+        if (!(home == null))
+            data.remove(home);
+        return true;
+    }
+
+    public boolean version() {
         player.sendMessage(Messages.HOMES_VERSION.parse(main.getDescription().getVersion()));
         player.sendMessage(Messages.HOMES_SITE.parse("site"));
         return true;
@@ -295,9 +307,9 @@ public class CommandHome implements CommandExecutor {
         return home;
     }
 
-    public boolean permCheck(String permission){
+    public boolean permCheck(String permission) {
         boolean allowed = false;
-        if(player.hasPermission(permission))
+        if (player.hasPermission(permission))
             allowed = true;
         else
             player.sendMessage(Messages.HOME_NO_PERM.parse());

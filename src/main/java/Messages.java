@@ -10,6 +10,7 @@ public enum Messages {
     HOME_SELF(                      "Moved you to your home!"),
     HOME_OTHER(                     "Moved you to %p's home!"),
     HOME_OTHER_TO_SELF(             "%p teleported to your home..."),
+    HOME_OBSOLETE(                  "The world your home was in is gone, you have to set a new home!"),
 
     //Home setting
     HOME_SET(                       "Your home has been set!"),
