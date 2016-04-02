@@ -1,3 +1,4 @@
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,7 +17,9 @@ public class HomeInfo {
     private double z;
     private String world;
     private String Id;
+    //Transient because we don't want GSON to serialize these variables
     private transient ArrayList<NameID> invitesArrayList;
+    private transient boolean obsolete;
     private NameID[] invites;
 
     public double getX() {
@@ -89,19 +92,6 @@ public class HomeInfo {
         invites = invitesArrayList.toArray(new NameID[invitesArrayList.size()]);
     }
 
-    public HomeInfo(double x, double y, double z){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public HomeInfo(Location loc){
-        this.x = loc.getX();
-        this.y = loc.getY();
-        this.z = loc.getZ();
-        this.world = loc.getWorld().getName();
-    }
-
     public HomeInfo(Player player){
         Location loc=player.getLocation();
         this.name = player.getName();
@@ -112,10 +102,23 @@ public class HomeInfo {
         this.Id = player.getUniqueId().toString();
         this.invitesArrayList = new ArrayList<NameID>();
         this.invites = invitesArrayList.toArray(new NameID[invitesArrayList.size()]);
+        this.obsolete = false;
     }
 
-    public Location toLocation(World world){
-        return new Location(world,x,y,z);
+    public Location toLocation(){
+        World w = null;
+
+        for(int i = 0; i < Bukkit.getWorlds().size() ; i++)
+            if(Bukkit.getWorlds().get(i).getName().equals(world))
+                w=Bukkit.getWorlds().get(i);
+
+        if(w==null){
+            Bukkit.getLogger().warning("[Homes] world does not exist! Using default world... Home marked for deletion");
+            w=Bukkit.getWorlds().get(0);
+            obsolete = true;
+        }
+
+        return new Location(w,x,y,z);
     }
 
     public String getInviteName(Player player){
@@ -156,6 +159,10 @@ public class HomeInfo {
         this.y = loc.getY();
         this.z = loc.getZ();
         this.world = loc.getWorld().getName();
+    }
+
+    public boolean isObsolete(){
+        return obsolete;
     }
 
 }

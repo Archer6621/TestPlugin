@@ -1,6 +1,7 @@
 name: Homes
 version: 0.1.0
 author: Archer
+website: http://www.windoomsmp.enjin.com/
 main: Main
 permission-message: &noperms "§cError: §fNo permission!"
 commands:

@@ -273,7 +273,7 @@ public class CommandHome implements CommandExecutor {
 
     public boolean version() {
         player.sendMessage(Messages.HOMES_VERSION.parse(main.getDescription().getVersion()));
-        player.sendMessage(Messages.HOMES_SITE.parse("site"));
+        player.sendMessage(Messages.HOMES_SITE.parse(main.getDescription().getWebsite()));
         return true;
     }
 
