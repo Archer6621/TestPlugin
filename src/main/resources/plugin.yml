@@ -1,4 +1,33 @@
-name: TestPlugin
-version: 0.0.1
+name: Homes
+version: 0.1.0
 author: Archer
 main: Main
+permission-message: &noperms "§cError: §fNo permission!"
+commands:
+  test:
+    description: A test
+    usage: /test
+  home:
+    description: Teleports the id to his home if set
+    usage: /home <arg1> <arg2>
+  sethome:
+    description: Sets the id's home if location is valid
+    usage: /sethome
+    aliases: [homeset]
+    permission: homes.set
+permissions:
+  homes.tp.self:
+    description: Allows teleporting to own home.
+    default: true
+  homes.tp.other:
+    description: Allows teleporting to other's homes.
+    default: true
+  homes.set:
+    description: Allows setting location of home.
+    default: true
+  homes.invite:
+    description: Allows invitation and uninvition of other players.
+    default: true
+  homes.admin:
+    description: Grants admin permissions.
+    default: op
