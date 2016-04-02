@@ -44,5 +44,5 @@ permissions:
     description: Allows invitation and uninvitation of other players.
     default: true
   homes.admin:
-    description: Grants access to all administrative commands.
+    description: Grants access to all administrative commands and grants additional priviledges.
     default: op

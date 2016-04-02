@@ -49,7 +49,10 @@ public class CommandHome implements CommandExecutor {
 
                     // /home help
                     if (args[0].equals("help")) {
-                        help();
+                        if(player.hasPermission("homes.admin"))
+                            helpAdmin();
+                        else
+                            help();
                     }
 
                     // /home ilist
