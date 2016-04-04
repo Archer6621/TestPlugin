@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -46,6 +45,8 @@ public class Main extends JavaPlugin {
             print(Messages.CONSOLE_DATA_EXISTS.parse());
             homeData = new ArrayList<HomeInfo>(Arrays.asList((new Gson()).fromJson(in, HomeInfo[].class)));
             in.close();
+
+            Import.essentials(this);
 
             print(Messages.CONSOLE_DONE_READING.parse());
 

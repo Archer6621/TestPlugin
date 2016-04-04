@@ -15,6 +15,8 @@ public class HomeInfo {
     private double x;
     private double y;
     private double z;
+    private float yaw;
+    private float pitch;
     private String world;
     private String Id;
     //Transient because we don't want GSON to serialize these variables
@@ -78,6 +80,21 @@ public class HomeInfo {
         this.invites = invites;
     }
 
+    public double getYaw() {
+        return yaw;
+    }
+
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
+
+    public double getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
 
     //Bit of a retarded way to do this, but too lazy to deal with GSON's annoyances with generics
     public void invite(NameID playerID){
@@ -98,6 +115,8 @@ public class HomeInfo {
         this.x = loc.getX();
         this.y = loc.getY();
         this.z = loc.getZ();
+        this.yaw = loc.getYaw();
+        this.pitch = loc.getPitch();
         this.world = loc.getWorld().getName();
         this.Id = player.getUniqueId().toString();
         this.invitesArrayList = new ArrayList<NameID>();
@@ -105,9 +124,23 @@ public class HomeInfo {
         this.obsolete = false;
     }
 
+    public HomeInfo(NameID nameId, String world, double x, double y, double z, float yaw, float pitch ){
+        this.name = nameId.getName();
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.world = world;
+        this.Id = nameId.getId();
+        this.invitesArrayList = new ArrayList<NameID>();
+        this.invites = invitesArrayList.toArray(new NameID[invitesArrayList.size()]);
+        this.obsolete = false;
+    }
+
     public Location toLocation(){
         World w = getBukkitWorld();
-        return new Location(w,x,y,z);
+        return new Location(w,x,y,z,yaw,pitch);
     }
 
     public String getInviteName(Player player){
