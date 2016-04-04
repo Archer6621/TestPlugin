@@ -11,6 +11,8 @@ import java.util.Scanner;
  * Created by Archer on 03-Apr-16.
  */
 public class Import {
+    private static int acc = 1000000;
+
     public static boolean essentials(Main main) {
         String path = main.getDataFolder().getPath().replace(main.getName(),"")+"Essentials"+File.separator+"userdata"+File.separator;
         main.print(Messages.tag+"FOUND ESSENTIALS PATH: "+path);
@@ -19,8 +21,10 @@ public class Import {
         File[] files = homeDir.listFiles();
         int counter = 1;
         int invalid = 0;
+        boolean lockedOnHome;
+        boolean badHome;
         for (File file : files) {
-            boolean lockedOnHome = false;
+            lockedOnHome = false;
 
             String name = "";
             String id = FilenameUtils.getBaseName(file.getName());
@@ -37,7 +41,7 @@ public class Import {
                     Scanner sc = new Scanner(file);
 
                     int lineCounter = 0;
-                    boolean badHome = false;
+                    badHome = false;
 
                     while (sc.hasNext()) {
 
@@ -63,32 +67,32 @@ public class Import {
                             lockedOnHome = true;
                         }
 
-                        if (line.contains("world:")) {
+                        if (lockedOnHome && line.contains("world:")) {
                             line = line.replace("world:", "");
                             line = StringUtils.deleteWhitespace(line);
                             world = line;
                         }
-                        if (line.contains("x:")) {
+                        if (lockedOnHome && line.contains("x:")) {
                             line = line.replace("x:", "");
                             line = StringUtils.deleteWhitespace(line);
-                            x = Double.parseDouble(line);
+                            x = Math.floor(Double.parseDouble(line)*acc) / acc;
                         }
-                        if (line.contains("y:")) {
+                        if (lockedOnHome && line.contains("y:")) {
                             line = line.replace("y:", "");
                             line = StringUtils.deleteWhitespace(line);
-                            y = Double.parseDouble(line);
+                            y = Math.floor(Double.parseDouble(line)*acc) / acc;
                         }
-                        if (line.contains("z:")) {
+                        if (lockedOnHome && line.contains("z:")) {
                             line = line.replace("z:", "");
                             line = StringUtils.deleteWhitespace(line);
-                            z = Double.parseDouble(line);
+                            z = Math.floor(Double.parseDouble(line)*acc) / acc;
                         }
-                        if (line.contains("yaw:")) {
+                        if (lockedOnHome && line.contains("yaw:")) {
                             line = line.replace("yaw:", "");
                             line = StringUtils.deleteWhitespace(line);
                             yaw = Float.parseFloat(line);
                         }
-                        if (line.contains("pitch:")) {
+                        if (lockedOnHome && line.contains("pitch:")) {
                             line = line.replace("pitch:", "");
                             line = StringUtils.deleteWhitespace(line);
                             pitch = Float.parseFloat(line);

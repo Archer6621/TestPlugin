@@ -24,7 +24,7 @@ public class CommandHome implements CommandExecutor {
 
     private boolean blackListed(String string) {
         boolean blackListed = false;
-        String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp", "edit","info"};
+        String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp", "edit","info","list"};
         for (int i = 0; i < blackList.length; i++)
             if (blackList[i].equalsIgnoreCase(string))
                 blackListed = true;
@@ -43,7 +43,7 @@ public class CommandHome implements CommandExecutor {
             data = main.getData();
 
             if (!(data == null) && !(player == null)) {
-                if (args.length == 0 && permCheck("homes.tp.self")) {
+                if (args.length == 0 && permCheckPlayer("homes.tp.self")) {
 
                     // /home
                     home();
@@ -59,22 +59,27 @@ public class CommandHome implements CommandExecutor {
                     }
 
                     // /home ilist
-                    else if (args[0].equals("ilist") && permCheck("homes.ilist")) {
+                    else if (args[0].equals("ilist") && permCheckPlayer("homes.set")) {
                         ilist();
                     }
 
-                    // /home set
-                    else if (args[0].equals("set") && permCheck("homes.set")) {
-                        set();
+                    // /home ilist
+                    else if (args[0].equals("list") && permCheckPlayer("homes.tp.other")) {
+                        list();
                     }
 
                     // /home set
+                    else if (args[0].equals("set") && permCheckPlayer("homes.set")) {
+                        set();
+                    }
+
+                    // /home version
                     else if (args[0].equals("version") && permCheck("homes.admin")) {
                         version();
                     }
 
                     // /home tp <player>
-                    else if (args[0].equals("tp") && permCheck("homes.tp.other")) {
+                    else if (args[0].equals("tp") && permCheckPlayer("homes.tp.other")) {
                         if ((args.length == 2))
                             homeOther(args[1]);
                         else
@@ -82,7 +87,7 @@ public class CommandHome implements CommandExecutor {
                     }
 
                     // /home invite <player>
-                    else if (args[0].equals("invite") && permCheck("homes.invite")) {
+                    else if (args[0].equals("invite") && permCheckPlayer("homes.invite")) {
                         if ((args.length == 2))
                             invite(args[1]);
                         else
@@ -90,7 +95,7 @@ public class CommandHome implements CommandExecutor {
                     }
 
                     // /home uninvite <player>
-                    else if (args[0].equals("uninvite") && permCheck("homes.invite")) {
+                    else if (args[0].equals("uninvite") && permCheckPlayer("homes.invite")) {
                         if ((args.length == 2))
                             uninvite(args[1]);
                         else
@@ -105,7 +110,7 @@ public class CommandHome implements CommandExecutor {
                             sendUsage(Messages.USAGE_CLEAR);
                     }
 
-                    // /home clear <player>
+                    // /home info <player>
                     else if (args[0].equals("info") && permCheck("homes.admin")) {
                         if ((args.length == 2))
                             info(args[1]);
@@ -126,7 +131,7 @@ public class CommandHome implements CommandExecutor {
                     }
 
                     // /home <player>
-                    else if (permCheck("homes.tp.other") && !blackListed(args[0])) {
+                    else if (permCheckPlayer("homes.tp.other") && !blackListed(args[0])) {
                         homeOther(args[0]);
                     }
                 }
@@ -258,6 +263,18 @@ public class CommandHome implements CommandExecutor {
             return true;
         }
         player.sendMessage(Messages.HOME_NOT_SET.parse());
+        return true;
+    }
+
+    public boolean list() {
+        ArrayList<String> players = new ArrayList<String>();
+        for (HomeInfo otherHome : data) {
+            if(otherHome.isInvited(player)){
+                players.add(otherHome.getName());
+            }
+        }
+        String list = Messages.HOME_INVITES_OTHER.parse(players.toArray(new String[players.size()]));
+        player.sendMessage(list);
         return true;
     }
 
@@ -397,6 +414,15 @@ public class CommandHome implements CommandExecutor {
     public boolean permCheck(String permission) {
         boolean allowed = false;
         if (player.hasPermission(permission))
+            allowed = true;
+        else
+            player.sendMessage(Messages.HOME_NO_PERM.parse());
+        return allowed;
+    }
+
+    public boolean permCheckPlayer(String permission) {
+        boolean allowed = false;
+        if (player.hasPermission("homes.player") || player.hasPermission(permission))
             allowed = true;
         else
             player.sendMessage(Messages.HOME_NO_PERM.parse());

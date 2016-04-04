@@ -73,6 +73,7 @@ public enum Messages {
 
     //Misc/utility
     HOME_INVITES(                   "Players invited to your home: %p"),
+    HOME_INVITES_OTHER(             "Homes you are invited to: %p"),
     HOME_HELP(
                                     "How to get along with Homes: \n" +
                                     ChatColor.WHITE+"=========================== \n" +

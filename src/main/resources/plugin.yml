@@ -14,7 +14,7 @@ commands:
     aliases: [homeset]
     permission: homes.set
 permissions:
-  homes.*:
+  homes.all:
     description: Grants access to ALL Homes commands
     children:
       homes.tp.self: true
