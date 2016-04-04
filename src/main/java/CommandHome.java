@@ -1,4 +1,6 @@
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +24,7 @@ public class CommandHome implements CommandExecutor {
 
     private boolean blackListed(String string) {
         boolean blackListed = false;
-        String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp"};
+        String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp", "edit"};
         for (int i = 0; i < blackList.length; i++)
             if (blackList[i].equalsIgnoreCase(string))
                 blackListed = true;
@@ -92,7 +94,7 @@ public class CommandHome implements CommandExecutor {
                         if ((args.length == 2))
                             uninvite(args[1]);
                         else
-                            player.sendMessage(Messages.USAGE_HOME_UNINVITE.parse("<player>"));
+                            sendUsage(Messages.USAGE_HOME_UNINVITE);
                     }
 
                     // /home clear <player>
@@ -100,7 +102,19 @@ public class CommandHome implements CommandExecutor {
                         if ((args.length == 2))
                             clear(args[1]);
                         else
-                            player.sendMessage(Messages.USAGE_CLEAR.parse("<player>"));
+                            sendUsage(Messages.USAGE_CLEAR);
+                    }
+
+                    // /home edit <player> <X> <Y> <Z> [<world>]
+                    else if (args[0].equals("edit") && permCheck("homes.admin")) {
+                        if ((args.length == 5)) {
+                            edit(args[1],args[2],args[3],args[4]);
+                        }
+                        else if ((args.length == 6)) {
+                            editWorld(args[1],args[2],args[3],args[4],args[5]);
+                        }
+                        else
+                            sendUsage(Messages.USAGE_EDIT);
                     }
 
                     // /home <player>
@@ -271,6 +285,57 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    public boolean edit(String other, String cx,String cy, String cz) {
+        HomeInfo home = getHome(other);
+        if (!(home==null)) {
+            if (isCoordinates(cx, cy, cz)) {
+                double x = Double.parseDouble(cx);
+                double y = Double.parseDouble(cy);
+                double z = Double.parseDouble(cz);
+
+                home.setX(x);
+                home.setY(y);
+                home.setZ(z);
+
+                sendPlayer(Messages.HOME_EDIT_SUCCESS);
+                return true;
+            }
+            sendPlayer(Messages.HOME_EDIT_INVALID);
+            return true;
+        }
+        sendPlayer(Messages.HOME_OTHER_NOT_SET,other);
+        return true;
+    }
+
+    public boolean editWorld(String other, String cx,String cy, String cz, String world) {
+        HomeInfo home = getHome(other);
+        if (!(home==null)) {
+            if (isCoordinates(cx, cy, cz)) {
+                double x = Double.parseDouble(cx);
+                double y = Double.parseDouble(cy);
+                double z = Double.parseDouble(cz);
+
+                home.setX(x);
+                home.setY(y);
+                home.setZ(z);
+
+                World w = getBukkitWorld(world);
+
+                if(!(w==null)){
+                    home.setWorld(w.getName());
+                    sendPlayer(Messages.HOME_EDIT_SUCCESS);
+                    return true;
+                }
+                sendPlayer(Messages.HOME_EDIT_NOWORLD);
+                return true;
+            }
+            sendPlayer(Messages.HOME_EDIT_INVALID);
+            return true;
+        }
+        sendPlayer(Messages.HOME_OTHER_NOT_SET,other);
+        return true;
+    }
+
     public boolean version() {
         player.sendMessage(Messages.HOMES_VERSION.parse(main.getDescription().getVersion()));
         player.sendMessage(Messages.HOMES_SITE.parse(main.getDescription().getWebsite()));
@@ -316,5 +381,62 @@ public class CommandHome implements CommandExecutor {
         return allowed;
     }
 
+    public void sendOther(Player receiver, Messages message, String variable){
+        receiver.sendMessage(message.parse(variable));
+    }
+
+    public void sendOther(Player receiver, Messages message){
+        receiver.sendMessage(message.parse());
+    }
+
+    public void sendPlayer(Messages message, String variable){
+        player.sendMessage(message.parse(variable));
+    }
+
+    public void sendPlayer(Messages message){
+        player.sendMessage(message.parse());
+    }
+
+    public void sendUsage(Messages message){
+        player.sendMessage(message.parse("<player>"));
+    }
+
+    public boolean isCoordinate(String input){
+        boolean isDouble = true;
+        double d;
+        try {
+            d = Double.parseDouble(input);
+        }
+        catch (NumberFormatException e) {
+            isDouble = false;
+        }
+        return isDouble;
+    }
+
+    public boolean isCoordinates(String cx, String cy, String cz){
+        boolean isDouble = true;
+        double x;
+        double y;
+        double z;
+        try {
+            x = Double.parseDouble(cx);
+            y = Double.parseDouble(cy);
+            z = Double.parseDouble(cz);
+        }
+        catch (NumberFormatException e) {
+            isDouble = false;
+        }
+        return isDouble;
+    }
+
+    public World getBukkitWorld(String world){
+        World w = null;
+
+        for(int i = 0; i < Bukkit.getWorlds().size() ; i++)
+            if(Bukkit.getWorlds().get(i).getName().equals(world))
+                w=Bukkit.getWorlds().get(i);
+
+        return w;
+    }
 }
 

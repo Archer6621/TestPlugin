@@ -106,18 +106,7 @@ public class HomeInfo {
     }
 
     public Location toLocation(){
-        World w = null;
-
-        for(int i = 0; i < Bukkit.getWorlds().size() ; i++)
-            if(Bukkit.getWorlds().get(i).getName().equals(world))
-                w=Bukkit.getWorlds().get(i);
-
-        if(w==null){
-            Bukkit.getLogger().warning("[Homes] world does not exist! Using default world... Home marked for deletion");
-            w=Bukkit.getWorlds().get(0);
-            obsolete = true;
-        }
-
+        World w = getBukkitWorld();
         return new Location(w,x,y,z);
     }
 
@@ -163,6 +152,22 @@ public class HomeInfo {
 
     public boolean isObsolete(){
         return obsolete;
+    }
+
+    public World getBukkitWorld(){
+        World w = null;
+
+        for(int i = 0; i < Bukkit.getWorlds().size() ; i++)
+            if(Bukkit.getWorlds().get(i).getName().equals(world))
+                w=Bukkit.getWorlds().get(i);
+
+        if(w==null){
+            Bukkit.getLogger().warning("[Homes] world does not exist! Using default world... Home marked for deletion");
+            w=Bukkit.getWorlds().get(0);
+            obsolete = true;
+        }
+
+        return w;
     }
 
 }

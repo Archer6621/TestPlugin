@@ -38,6 +38,7 @@ public enum Messages {
     USAGE_HOME_UNINVITE(            "Usage: /home uninvite %p"),
     USAGE_HOME_ILIST(               "Usage: /home ilist"),
     USAGE_CLEAR(                    "Usage: /home clear %p"),
+    USAGE_EDIT(                     "Usage: /home edit %p <X> <Y> <Z> [<world>]"),
 
     //Console
     CONSOLE_ENABLING(               "Enabling Homes v%p..."),
@@ -45,14 +46,17 @@ public enum Messages {
     CONSOLE_DONE_READING(           "Done reading!"),
     CONSOLE_DATA_EXISTS_NOT(        "No existing database, creating a new one..."),
     CONSOLE_ERROR_FILE(             "Error while creating file.."),
-    CONSOLE_DATA_SAVED(             "successfully serialized to JSON! saved locations to database."),
+    CONSOLE_DATA_SAVED(             "successfully serialized to JSON! saved locations to database"),
     CONSOLE_DATA_SAVE_FAIL(         "failed to save locations, file does not exist or is locked!"),
     CONSOLE_DISABLING(              "Disabling Homes..."),
 
     //Admin
     HOMES_VERSION(                  "Homes v%p"),
     HOMES_SITE(                     "Visit the following for more info: %p"),
-    HOME_CLEAR(                     "Cleared %p's home from the databse"),
+    HOME_CLEAR(                     "Cleared %p's home from the database"),
+    HOME_EDIT_INVALID(              "Invalid parameters, use numbers please"),
+    HOME_EDIT_NOWORLD(              "This world does not exist, please check the name"),
+    HOME_EDIT_SUCCESS(              "Home edited successfully!"),
 
     //Residence
     RES_SETHOME_NOT_ALLOWED(        "You need the %p flag in order to set your home here!"),
