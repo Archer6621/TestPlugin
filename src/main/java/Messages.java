@@ -89,12 +89,12 @@ public enum Messages {
 
     private final String message;
 
-    private final ChatColor textColor = ChatColor.YELLOW;
-    private final ChatColor tagColor = ChatColor.WHITE;
-    private final ChatColor nameColor = ChatColor.AQUA;
+    private final static ChatColor textColor = ChatColor.YELLOW;
+    private final static ChatColor tagColor = ChatColor.WHITE;
+    private final static ChatColor nameColor = ChatColor.AQUA;
 
 
-    private final String tag = textColor+"["+tagColor+"Homes"+textColor+"] ";
+    public final static String tag = textColor+"["+tagColor+"Homes"+textColor+"] ";
 
     Messages(final String message){
         this.message = message;

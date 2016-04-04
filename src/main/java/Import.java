@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Import {
     public static void essentials(Main main) {
         String path = main.getDataFolder().getPath().replace(main.getName(),"")+"Essentials"+File.separator+"userdata"+File.separator;
-        main.print(path);
+        main.print(Messages.tag+"FOUND ESSENTIALS PATH: "+path);
         File homeDir = new File(path);
 
         File[] files = homeDir.listFiles();
@@ -119,11 +119,11 @@ public class Import {
             }
         }
         if (counter == 1) {
-            main.print("[HOMES] FOUND NO VALID HOMES HERE!");
-            main.print("[HOMES] FOUND " + invalid + " HOMES");
+            main.print(Messages.tag+"[HOMES] FOUND NO VALID HOMES HERE!");
+            main.print(Messages.tag+"[HOMES] FOUND " + invalid + "INVALID HOMES");
         } else {
-            main.print("[HOMES] IMPORTED " + counter + " HOMES IN TOTAL");
-            main.print("[HOMES] FOUND " + invalid + " HOMES");
+            main.print(Messages.tag+"[HOMES] IMPORTED " + counter + " HOMES IN TOTAL");
+            main.print(Messages.tag+"[HOMES] FOUND " + invalid + "INVALID HOMES");
         }
     }
 }
