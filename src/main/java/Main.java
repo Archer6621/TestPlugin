@@ -122,7 +122,6 @@ public class Main extends JavaPlugin {
         }
 
         readData();
-        this.getCommand("test").setExecutor(new CommandTest());
         this.getCommand("home").setExecutor(new CommandHome(this));
         this.getCommand("sethome").setExecutor(new CommandSetHome(this));
     }
