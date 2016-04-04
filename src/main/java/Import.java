@@ -99,19 +99,21 @@ public class Import {
                     if(!badHome) {
                         NameID nameId = new NameID(name, id);
                         HomeInfo homeInfo = new HomeInfo(nameId, world, x, y, z, yaw, pitch);
-                        main.getData().add(homeInfo);
+                        boolean isNew = main.getData().add(homeInfo);
 
-                        System.out.println("============HOME: " + counter + "===================");
-                        System.out.println("ID: " + id);
-                        System.out.println("NAME: " + name);
-                        System.out.println(" WORLD: " + world);
-                        System.out.println(" X: " + x);
-                        System.out.println(" Y: " + y);
-                        System.out.println(" Z: " + z);
-                        System.out.println(" YAW: " + yaw);
-                        System.out.println(" PITCH: " + pitch);
+                        if(isNew) {
+                            System.out.println("============HOME: " + counter + "===================");
+                            System.out.println("ID: " + id);
+                            System.out.println("NAME: " + name);
+                            System.out.println(" WORLD: " + world);
+                            System.out.println(" X: " + x);
+                            System.out.println(" Y: " + y);
+                            System.out.println(" Z: " + z);
+                            System.out.println(" YAW: " + yaw);
+                            System.out.println(" PITCH: " + pitch);
 
-                        counter++;
+                            counter++;
+                        }
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

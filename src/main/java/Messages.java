@@ -67,7 +67,7 @@ public enum Messages {
     //Importers
     HOME_IMPORT_ESSENTIALS(         "FOUND ESSENTIALS PATH: %p"),
     HOME_IMPORT_COUNT(              "IMPORTED %p HOMES IN TOTAL"),
-    HOME_IMPORT_NONE(               "FOUND NO VALID HOMES HERE!"),
+    HOME_IMPORT_NONE(               "FOUND NO (NEW) VALID HOMES HERE!"),
     HOME_IMPORT_INVALID(               "FOUND %p INVALID HOMES HERE!"),
 
     //Misc/utility
