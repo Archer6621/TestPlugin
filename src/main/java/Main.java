@@ -46,7 +46,7 @@ public class Main extends JavaPlugin {
             homeData = new ArrayList<HomeInfo>(Arrays.asList((new Gson()).fromJson(in, HomeInfo[].class)));
             in.close();
 
-            Import.essentials(this);
+
 
             print(Messages.CONSOLE_DONE_READING.parse());
 
@@ -62,6 +62,8 @@ public class Main extends JavaPlugin {
                 //e2.printStackTrace();
             }
         }
+
+        Import.essentials(this);
     }
 
     private void saveData(){

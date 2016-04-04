@@ -13,11 +13,12 @@ import java.util.Scanner;
 public class Import {
     public static void essentials(Main main) {
         String path = main.getDataFolder().getPath().replace(main.getName(),"")+"Essentials"+File.separator+"userdata"+File.separator;
-        System.out.println(path);
+        main.print(path);
         File homeDir = new File(path);
 
         File[] files = homeDir.listFiles();
         int counter = 1;
+        int invalid = 0;
         for (File file : files) {
             boolean lockedOnHome = false;
 
@@ -35,11 +36,22 @@ public class Import {
                 try {
                     Scanner sc = new Scanner(file);
 
+                    int lineCounter = 0;
+                    boolean badHome = false;
 
                     while (sc.hasNext()) {
 
                         String line = sc.nextLine();
+                        lineCounter++;
 
+                        if (lineCounter==1 && !line.contains("lastAccountName:")) {
+                            System.out.println("=======================================");
+                            System.out.println("----------HOME: " + counter + "IS INVALID---------");
+                            System.out.println("=======================================");
+                            invalid++;
+                            badHome = true;
+                            break;
+                        }
 
                         if (line.contains("lastAccountName:")) {
                             line = line.replace("lastAccountName:", "");
@@ -84,30 +96,34 @@ public class Import {
                         }
 
                     }
+                    if(!badHome) {
+                        NameID nameId = new NameID(name, id);
+                        HomeInfo homeInfo = new HomeInfo(nameId, world, x, y, z, yaw, pitch);
+                        main.getData().add(homeInfo);
 
-                    NameID nameId = new NameID(name, id);
-                    HomeInfo homeInfo = new HomeInfo(nameId, world, x, y, z, yaw, pitch);
-                    main.getData().add(homeInfo);
+                        System.out.println("============HOME: " + counter + "===================");
+                        System.out.println("ID: " + id);
+                        System.out.println("NAME: " + name);
+                        System.out.println(" WORLD: " + world);
+                        System.out.println(" X: " + x);
+                        System.out.println(" Y: " + y);
+                        System.out.println(" Z: " + z);
+                        System.out.println(" YAW: " + yaw);
+                        System.out.println(" PITCH: " + pitch);
 
-                    System.out.println("============HOME: " + counter + "===================");
-                    System.out.println("ID: " + id);
-                    System.out.println("NAME: " + name);
-                    System.out.println(" WORLD: " + world);
-                    System.out.println(" X: " + x);
-                    System.out.println(" Y: " + y);
-                    System.out.println(" Z: " + z);
-                    System.out.println(" YAW: " + yaw);
-                    System.out.println(" PITCH: " + pitch);
-
-                    counter++;
+                        counter++;
+                    }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
         if (counter == 1) {
-            System.out.println("FOUND NO HOMES HERE!");
-        } else
-            System.out.println("FOUND " + counter + " HOMES IN TOTAL");
+            main.print("[HOMES] FOUND NO VALID HOMES HERE!");
+            main.print("[HOMES] FOUND " + invalid + " HOMES");
+        } else {
+            main.print("[HOMES] IMPORTED " + counter + " HOMES IN TOTAL");
+            main.print("[HOMES] FOUND " + invalid + " HOMES");
+        }
     }
 }
