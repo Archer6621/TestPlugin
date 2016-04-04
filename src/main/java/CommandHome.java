@@ -176,6 +176,7 @@ public class CommandHome implements CommandExecutor {
                         otherPlayer.sendMessage(Messages.HOME_OTHER_TO_SELF.parse(player.getName()));
                         return true;
                     }
+                    return true;
                 }
                 player.sendMessage(Messages.HOME_OBSOLETE.parse(otherHome.getWorld()));
                 clear(otherHome);
