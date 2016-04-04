@@ -360,7 +360,7 @@ public class CommandHome implements CommandExecutor {
             player.sendMessage((Double.toString(home.getZ())));
             return true;
         }
-        sendPlayer(Messages.HOME_OTHER_NOT_SET);
+        sendPlayer(Messages.HOME_OTHER_NOT_SET,other);
         return true;
     }
 
