@@ -203,4 +203,47 @@ public class HomeInfo {
         return w;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HomeInfo homeInfo = (HomeInfo) o;
+
+        if (Double.compare(homeInfo.x, x) != 0) return false;
+        if (Double.compare(homeInfo.y, y) != 0) return false;
+        if (Double.compare(homeInfo.z, z) != 0) return false;
+        if (Float.compare(homeInfo.yaw, yaw) != 0) return false;
+        if (Float.compare(homeInfo.pitch, pitch) != 0) return false;
+        if (obsolete != homeInfo.obsolete) return false;
+        if (name != null ? !name.equals(homeInfo.name) : homeInfo.name != null) return false;
+        if (world != null ? !world.equals(homeInfo.world) : homeInfo.world != null) return false;
+        if (Id != null ? !Id.equals(homeInfo.Id) : homeInfo.Id != null) return false;
+        if (invitesArrayList != null ? !invitesArrayList.equals(homeInfo.invitesArrayList) : homeInfo.invitesArrayList != null)
+            return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(invites, homeInfo.invites);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (yaw != +0.0f ? Float.floatToIntBits(yaw) : 0);
+        result = 31 * result + (pitch != +0.0f ? Float.floatToIntBits(pitch) : 0);
+        result = 31 * result + (world != null ? world.hashCode() : 0);
+        result = 31 * result + (Id != null ? Id.hashCode() : 0);
+        result = 31 * result + (invitesArrayList != null ? invitesArrayList.hashCode() : 0);
+        result = 31 * result + (obsolete ? 1 : 0);
+        result = 31 * result + Arrays.hashCode(invites);
+        return result;
+    }
 }

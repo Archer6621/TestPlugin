@@ -5,9 +5,6 @@ website: http://www.windoomsmp.enjin.com/
 main: Main
 permission-message: &noperms "§cError: §fNo permission!"
 commands:
-  test:
-    description: A test
-    usage: /test
   home:
     description: Teleports the id to his home if set
     usage: /home <arg1> <arg2>
