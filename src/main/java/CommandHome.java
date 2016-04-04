@@ -157,7 +157,7 @@ public class CommandHome implements CommandExecutor {
 
         if (!(otherHome == null)) {
             String name = otherHome.getInviteName(player);
-            if (!(name == null)) {
+            if (!(name == null) || permCheckSilent("homes.admin")) {
                 Location loc = otherHome.toLocation();
                 if (!otherHome.isObsolete()) {
                     player.teleport(loc);
@@ -378,6 +378,13 @@ public class CommandHome implements CommandExecutor {
             allowed = true;
         else
             player.sendMessage(Messages.HOME_NO_PERM.parse());
+        return allowed;
+    }
+
+    public boolean permCheckSilent(String permission) {
+        boolean allowed = false;
+        if (player.hasPermission(permission))
+            allowed = true;
         return allowed;
     }
 
