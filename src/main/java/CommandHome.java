@@ -24,7 +24,7 @@ public class CommandHome implements CommandExecutor {
 
     private boolean blackListed(String string) {
         boolean blackListed = false;
-        String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp", "edit"};
+        String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp", "edit","info"};
         for (int i = 0; i < blackList.length; i++)
             if (blackList[i].equalsIgnoreCase(string))
                 blackListed = true;
