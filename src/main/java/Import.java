@@ -118,12 +118,11 @@ public class Import {
                 }
             }
         }
-        if (counter == 1) {
-            main.print(Messages.tag+"[HOMES] FOUND NO VALID HOMES HERE!");
-            main.print(Messages.tag+"[HOMES] FOUND " + invalid + "INVALID HOMES");
-        } else {
-            main.print(Messages.tag+"[HOMES] IMPORTED " + counter + " HOMES IN TOTAL");
-            main.print(Messages.tag+"[HOMES] FOUND " + invalid + "INVALID HOMES");
-        }
+        
+        if (counter == 1)
+            main.print(Messages.HOME_IMPORT_NONE.parse());
+        else
+            main.print(Messages.HOME_IMPORT_COUNT.parse(counter));
+        main.print(Messages.HOME_IMPORT_INVALID.parse(invalid));
     }
 }

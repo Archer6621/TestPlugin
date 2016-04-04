@@ -64,6 +64,12 @@ public enum Messages {
     RES_ENABLED(                    "Successfully hooked into Residence!"),
     RES_DISABLED(                   "Residence NOT Installed, DISABLED!"),
 
+    //Importers
+    HOME_IMPORT_ESSENTIALS(         "FOUND ESSENTIALS PATH: %p"),
+    HOME_IMPORT_COUNT(              "IMPORTED %p HOMES IN TOTAL"),
+    HOME_IMPORT_NONE(               "FOUND NO VALID HOMES HERE!"),
+    HOME_IMPORT_INVALID(               "FOUND %p INVALID HOMES HERE!"),
+
     //Misc/utility
     HOME_INVITES(                   "Players invited to your home: %p"),
     HOME_HELP(
@@ -110,6 +116,10 @@ public enum Messages {
 
     public String parse(String player){
         return tag + this.message.replace("%p",nameColor+player+textColor);
+    }
+
+    public String parse(int integer){
+        return tag + this.message.replace("%p",nameColor+Integer.toString(integer)+textColor);
     }
 
     public String parse(String[] players){
