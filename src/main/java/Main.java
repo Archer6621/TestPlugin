@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,8 +21,8 @@ import java.util.*;
 public class Main extends JavaPlugin {
 
     public List<HomeInfo> homeData;
+    public FileConfiguration config = this.getConfig();
     private String dataPath = this.getDataFolder().getPath() + File.separator + "data.json";
-
 
     public ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
@@ -50,7 +51,6 @@ public class Main extends JavaPlugin {
 
             print(Messages.CONSOLE_DONE_READING.parse());
 
-            if(!(homeData==null)){print(homeData.toString());}
         } catch (IOException e1) {
             print(Messages.CONSOLE_DATA_EXISTS_NOT.parse());
             File file = new File(dataPath);
@@ -63,7 +63,11 @@ public class Main extends JavaPlugin {
             }
         }
 
-        Import.essentials(this);
+        //Import essentials on first time, after that it has to be manually set to true for import
+        if(config.getBoolean("import-from-essentials")) {
+            Import.essentials(this);
+            config.set("import-from-essentials", false);
+        }
     }
 
     private void saveData(){
@@ -94,6 +98,10 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        config.addDefault("import-from-essentials", true);
+        config.options().copyDefaults(true);
+        saveConfig();
+
         print(Messages.CONSOLE_ENABLING.parse(this.getDescription().getVersion()));
         homeData = new ArrayList<HomeInfo>();
         //If data folder does not exist
@@ -129,6 +137,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable(){
         print(Messages.CONSOLE_DISABLING.parse());
+        saveConfig();
         saveData();
     }
 }

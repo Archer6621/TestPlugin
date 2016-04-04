@@ -11,7 +11,7 @@ import java.util.Scanner;
  * Created by Archer on 03-Apr-16.
  */
 public class Import {
-    public static void essentials(Main main) {
+    public static boolean essentials(Main main) {
         String path = main.getDataFolder().getPath().replace(main.getName(),"")+"Essentials"+File.separator+"userdata"+File.separator;
         main.print(Messages.tag+"FOUND ESSENTIALS PATH: "+path);
         File homeDir = new File(path);
@@ -126,5 +126,8 @@ public class Import {
         else
             main.print(Messages.HOME_IMPORT_COUNT.parse(counter));
         main.print(Messages.HOME_IMPORT_INVALID.parse(invalid));
+
+        return true;
     }
+
 }

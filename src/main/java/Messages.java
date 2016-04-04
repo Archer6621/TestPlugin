@@ -10,7 +10,7 @@ public enum Messages {
     HOME_SELF(                      "Moved you to your home!"),
     HOME_OTHER(                     "Moved you to %p's home!"),
     HOME_OTHER_TO_SELF(             "%p teleported to your home..."),
-    HOME_OBSOLETE(                  "The world your home was in is gone, you have to set a new home!"),
+    HOME_OBSOLETE(                  "The world this home was in is gone! (%p)"),
 
     //Home setting
     HOME_SET(                       "Your home has been set!"),
@@ -38,6 +38,7 @@ public enum Messages {
     USAGE_HOME_UNINVITE(            "Usage: /home uninvite %p"),
     USAGE_HOME_ILIST(               "Usage: /home ilist"),
     USAGE_CLEAR(                    "Usage: /home clear %p"),
+    USAGE_INFO(                    "Usage: /home info %p"),
     USAGE_EDIT(                     "Usage: /home edit %p <X> <Y> <Z> [<world>]"),
 
     //Console

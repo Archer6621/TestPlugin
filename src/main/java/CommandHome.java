@@ -105,6 +105,14 @@ public class CommandHome implements CommandExecutor {
                             sendUsage(Messages.USAGE_CLEAR);
                     }
 
+                    // /home clear <player>
+                    else if (args[0].equals("info") && permCheck("homes.admin")) {
+                        if ((args.length == 2))
+                            info(args[1]);
+                        else
+                            sendUsage(Messages.USAGE_INFO);
+                    }
+
                     // /home edit <player> <X> <Y> <Z> [<world>]
                     else if (args[0].equals("edit") && permCheck("homes.admin")) {
                         if ((args.length == 5)) {
@@ -169,7 +177,7 @@ public class CommandHome implements CommandExecutor {
                         return true;
                     }
                 }
-                player.sendMessage(Messages.HOME_OBSOLETE.parse());
+                player.sendMessage(Messages.HOME_OBSOLETE.parse(otherHome.getWorld()));
                 clear(otherHome);
                 return true;
             }
@@ -339,6 +347,19 @@ public class CommandHome implements CommandExecutor {
     public boolean version() {
         player.sendMessage(Messages.HOMES_VERSION.parse(main.getDescription().getVersion()));
         player.sendMessage(Messages.HOMES_SITE.parse(main.getDescription().getWebsite()));
+        return true;
+    }
+
+    public boolean info(String other){
+        HomeInfo home = getHome(other);
+        if(!(home==null)){
+            player.sendMessage((home.getWorld()));
+            player.sendMessage((Double.toString(home.getX())));
+            player.sendMessage((Double.toString(home.getY())));
+            player.sendMessage((Double.toString(home.getZ())));
+            return true;
+        }
+        sendPlayer(Messages.HOME_OTHER_NOT_SET);
         return true;
     }
 
