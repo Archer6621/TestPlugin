@@ -1,3 +1,5 @@
+package com.aquanova_mp.Homes;
+
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
@@ -14,10 +16,10 @@ import java.util.UUID;
  * Created by Archer on 30-Mar-16.
  */
 public class CommandSetHome implements CommandExecutor {
-    private Main main;
+    private Homes homes;
 
-    public CommandSetHome(Main main){
-        this.main = main;
+    public CommandSetHome(Homes homes){
+        this.homes = homes;
     }
 
     // This method is called, when somebody uses our command
@@ -29,7 +31,7 @@ public class CommandSetHome implements CommandExecutor {
         if(sender instanceof Player){
             Player player = (Player) sender;
 
-            if(main.resEnabled || !player.hasPermission("homes.admin")) {
+            if(homes.resEnabled || !player.hasPermission("homes.admin")) {
                 Location loc = player.getLocation();
                 ClaimedResidence res = Residence.getResidenceManager().getByLoc(loc);
                 if (!(res == null)) {
@@ -48,7 +50,7 @@ public class CommandSetHome implements CommandExecutor {
             }
 
             if(!(player.getLocation()==null)) {
-                List<HomeInfo> data = main.getData();
+                List<HomeInfo> data = homes.getData();
                 if(!(data==null)) {
                     for (int i = 0; i < data.size(); i++) {
                         if (player.getUniqueId().equals(UUID.fromString(data.get(i).getId()))) {
@@ -64,7 +66,7 @@ public class CommandSetHome implements CommandExecutor {
                 }
             }
             player.sendMessage(Messages.HOME_SET_ERROR.parse());
-            main.print("WARNING: sethome failed for player " + player.getName() + "!");
+            homes.print("WARNING: sethome failed for player " + player.getName() + "!");
             return true;
         }
 

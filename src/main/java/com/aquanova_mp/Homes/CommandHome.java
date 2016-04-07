@@ -1,3 +1,5 @@
+package com.aquanova_mp.Homes;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ import static org.bukkit.Bukkit.getServer;
  * Created by Archer on 30-Mar-16.
  */
 public class CommandHome implements CommandExecutor {
-    private Main main;
+    private Homes homes;
     private List<HomeInfo> data;
     private Player player;
 
@@ -31,8 +32,8 @@ public class CommandHome implements CommandExecutor {
         return blackListed;
     }
 
-    public CommandHome(Main main) {
-        this.main = main;
+    public CommandHome(Homes homes) {
+        this.homes = homes;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CommandHome implements CommandExecutor {
         if (sender instanceof Player) {
 
             player = (Player) sender;
-            data = main.getData();
+            data = homes.getData();
 
             if (!(data == null) && !(player == null)) {
                 if (args.length == 0 && permCheckPlayer("homes.tp.self")) {
@@ -363,8 +364,8 @@ public class CommandHome implements CommandExecutor {
     }
 
     public boolean version() {
-        player.sendMessage(Messages.HOMES_VERSION.parse(main.getDescription().getVersion()));
-        player.sendMessage(Messages.HOMES_SITE.parse(main.getDescription().getWebsite()));
+        player.sendMessage(Messages.HOMES_VERSION.parse(homes.getDescription().getVersion()));
+        player.sendMessage(Messages.HOMES_SITE.parse(homes.getDescription().getWebsite()));
         return true;
     }
 

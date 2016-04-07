@@ -1,3 +1,5 @@
+package com.aquanova_mp.Homes;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,6 +14,7 @@ import java.util.Objects;
  */
 public class HomeInfo {
 
+    //All home/user data we need to save
     private String name;
     private double x;
     private double y;
@@ -20,10 +23,13 @@ public class HomeInfo {
     private float pitch;
     private String world;
     private String Id;
+    private NameID[] invites;   //Array that holds the player NameID's that are invited to this particular home
+
     //Transient because we don't want GSON to serialize these variables
     private transient ArrayList<NameID> invitesArrayList;
     private transient boolean obsolete;
-    private NameID[] invites;
+
+
 
     public double getX() {
         return x;

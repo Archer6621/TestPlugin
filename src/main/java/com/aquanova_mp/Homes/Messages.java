@@ -1,6 +1,6 @@
+package com.aquanova_mp.Homes;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.entity.Player;
 
 /**
  * Created by Archer on 01-Apr-16.
@@ -37,6 +37,7 @@ public enum Messages {
     USAGE_HOME_SET(                 "Usage: /sethome"),
     USAGE_HOME_UNINVITE(            "Usage: /home uninvite %p"),
     USAGE_HOME_ILIST(               "Usage: /home ilist"),
+    USAGE_HOME_LIST(               "Usage: /home list"),
     USAGE_CLEAR(                    "Usage: /home clear %p"),
     USAGE_INFO(                    "Usage: /home info %p"),
     USAGE_EDIT(                     "Usage: /home edit %p <X> <Y> <Z> [<world>]"),
@@ -52,7 +53,7 @@ public enum Messages {
     CONSOLE_DISABLING(              "Disabling Homes..."),
 
     //Admin
-    HOMES_VERSION(                  "Homes v%p"),
+    HOMES_VERSION(                  "com.aquanova_mp.Homes.Homes v%p"),
     HOMES_SITE(                     "Visit the following for more info: %p"),
     HOME_CLEAR(                     "Cleared %p's home from the database"),
     HOME_EDIT_INVALID(              "Invalid parameters, use numbers please"),
@@ -75,7 +76,7 @@ public enum Messages {
     HOME_INVITES(                   "Players invited to your home: %p"),
     HOME_INVITES_OTHER(             "Homes you are invited to: %p"),
     HOME_HELP(
-                                    "How to get along with Homes: \n" +
+                                    "How to get along with com.aquanova_mp.Homes.Homes: \n" +
                                     ChatColor.WHITE+"=========================== \n" +
                                     ChatColor.GRAY+"-"+ChatColor.AQUA+" /home   "+ChatColor.YELLOW+"Teleports you to your home \n" +
                                     ChatColor.GRAY+"-"+ChatColor.AQUA+" /home set   "+ChatColor.YELLOW+"Sets your home to your location \n" +
@@ -83,7 +84,7 @@ public enum Messages {
                                     ChatColor.GRAY+"-"+ChatColor.AQUA+" /home invite <player>   "+ChatColor.YELLOW+"Invites <player> to your home \n" +
                                     ChatColor.GRAY+"-"+ChatColor.AQUA+" /home uninvite <player>   "+ChatColor.YELLOW+"Uninvites <player> from your home \n" +
                                     ChatColor.GRAY+"-"+ChatColor.AQUA+" /home ilist   "+ChatColor.YELLOW+"Displays a list of players invited to your home\n" +
-                                    ChatColor.GRAY+"-"+ChatColor.AQUA+" /home help   "+ChatColor.YELLOW+"Displays this list of commands for Homes"
+                                    ChatColor.GRAY+"-"+ChatColor.AQUA+" /home help   "+ChatColor.YELLOW+"Displays this list of commands for com.aquanova_mp.Homes.Homes"
     ),
     HOME_HELP_ADMIN(
                                     ChatColor.GRAY+"-"+ChatColor.RED+" /home clear  "+ChatColor.YELLOW+"Clears somebody's home \n" +

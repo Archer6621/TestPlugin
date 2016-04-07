@@ -2,7 +2,7 @@ name: Homes
 version: 0.1.0
 author: Archer
 website: http://www.windoomsmp.enjin.com/
-main: Main
+main: com.aquanova_mp.Homes.Homes
 permission-message: &noperms "§cError: §fNo permission!"
 commands:
   home:
@@ -15,7 +15,7 @@ commands:
     permission: homes.set
 permissions:
   homes.all:
-    description: Grants access to ALL Homes commands
+    description: Grants access to ALL com.aquanova_mp.Homes.Homes commands
     children:
       homes.tp.self: true
       homes.tp.other: true

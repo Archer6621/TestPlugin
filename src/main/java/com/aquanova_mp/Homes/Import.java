@@ -1,10 +1,10 @@
+package com.aquanova_mp.Homes;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -13,9 +13,9 @@ import java.util.Scanner;
 public class Import {
     private static int acc = 1000000;
 
-    public static boolean essentials(Main main) {
-        String path = main.getDataFolder().getPath().replace(main.getName(),"")+"Essentials"+File.separator+"userdata"+File.separator;
-        main.print(Messages.tag+"FOUND ESSENTIALS PATH: "+path);
+    public static boolean essentials(Homes homes) {
+        String path = homes.getDataFolder().getPath().replace(homes.getName(),"")+"Essentials"+File.separator+"userdata"+File.separator;
+        homes.print(Messages.tag+"FOUND ESSENTIALS PATH: "+path);
         File homeDir = new File(path);
 
         File[] files = homeDir.listFiles();
@@ -103,7 +103,7 @@ public class Import {
                     if(!badHome) {
                         NameID nameId = new NameID(name, id);
                         HomeInfo homeInfo = new HomeInfo(nameId, world, x, y, z, yaw, pitch);
-                        boolean isNew = main.getData().add(homeInfo);
+                        boolean isNew = homes.getData().add(homeInfo);
 
                         if(isNew) {
                             System.out.println("============HOME: " + counter + "===================");
@@ -126,10 +126,10 @@ public class Import {
         }
 
         if (counter == 1)
-            main.print(Messages.HOME_IMPORT_NONE.parse());
+            homes.print(Messages.HOME_IMPORT_NONE.parse());
         else
-            main.print(Messages.HOME_IMPORT_COUNT.parse(counter));
-        main.print(Messages.HOME_IMPORT_INVALID.parse(invalid));
+            homes.print(Messages.HOME_IMPORT_COUNT.parse(counter));
+        homes.print(Messages.HOME_IMPORT_INVALID.parse(invalid));
 
         return true;
     }

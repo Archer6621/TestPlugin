@@ -1,4 +1,4 @@
-
+package com.aquanova_mp.Homes;
 /**
  * Created by Archer on 30-Mar-16.
  */
@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.util.*;
 
-public class Main extends JavaPlugin {
+public class Homes extends JavaPlugin {
 
     public List<HomeInfo> homeData;
     public FileConfiguration config = this.getConfig();
@@ -63,7 +63,7 @@ public class Main extends JavaPlugin {
             }
         }
 
-        //Import essentials on first time, after that it has to be manually set to true for import
+        //com.aquanova_mp.Homes.Import essentials on first time, after that it has to be manually set to true for import
         if(config.getBoolean("import-from-essentials")) {
             Import.essentials(this);
             config.set("import-from-essentials", false);
