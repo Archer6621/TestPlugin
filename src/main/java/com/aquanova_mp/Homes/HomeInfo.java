@@ -30,7 +30,7 @@ public class HomeInfo {
     private transient boolean obsolete;
 
 
-
+    //All relevant getters and setters
     public double getX() {
         return x;
     }
@@ -103,19 +103,24 @@ public class HomeInfo {
         this.pitch = pitch;
     }
 
+
     //Bit of a retarded way to do this, but too lazy to deal with GSON's annoyances with generics
+
+    //Adds a player's Name + ID combination (NameID) to the invite list
     public void invite(NameID playerID){
         invitesArrayList = new ArrayList<NameID>(Arrays.asList(invites));
         invitesArrayList.add(playerID);
         invites = invitesArrayList.toArray(new NameID[invitesArrayList.size()]);
     }
 
+    //Removes a player's NameID from the invite list
     public void uninvite(NameID playerID){
         invitesArrayList = new ArrayList<NameID>(Arrays.asList(invites));
         invitesArrayList.remove(playerID);
         invites = invitesArrayList.toArray(new NameID[invitesArrayList.size()]);
     }
 
+    //Constructor that is used by default
     public HomeInfo(Player player){
         Location loc=player.getLocation();
         this.name = player.getName();
@@ -131,6 +136,7 @@ public class HomeInfo {
         this.obsolete = false;
     }
 
+    //Constructor for handling home imports from other plugins
     public HomeInfo(NameID nameId, String world, double x, double y, double z, float yaw, float pitch ){
         this.name = nameId.getName();
         this.x = x;
@@ -145,32 +151,25 @@ public class HomeInfo {
         this.obsolete = false;
     }
 
+    //Convert location data to actual location
     public Location toLocation(){
         World w = getBukkitWorld();
         return new Location(w,x,y,z,yaw,pitch);
     }
 
-    public String getInviteName(Player player){
-        String name = null;
-        for (int j = 0; j < invites.length; j++) {
-            if (invites[j].getName().equals(player.getName())) {
-                name = invites[j].getName();
-            }
-        }
-        return name;
-    }
-
+    //Checks whether a certain player is invited by checking the UUID, updates the name as well in case it has changed
     public boolean isInvited(Player player){
         boolean invited = false;
         for (int j = 0; j < invites.length; j++) {
-            if (invites[j].getName().equals(player.getName())) {
+            if (invites[j].getId().equals(player.getUniqueId().toString())) {
                 invited = true;
+                invites[j].setName(player.getName());
             }
         }
         return invited;
     }
 
-
+    //Finds the nameID of the requested player and returns it, null if not found (compares by name, since that is what the user inputs in the command)
     public NameID getInvite(String player){
         NameID nameId = null;
         for (int j = 0; j < invites.length; j++) {
@@ -181,6 +180,7 @@ public class HomeInfo {
         return nameId;
     }
 
+    //Update the home's location, the world it is in, and the owner's name in case it has changed
     public void updateHome(Player player){
         Location loc=player.getLocation();
         this.name = player.getName();
@@ -190,10 +190,13 @@ public class HomeInfo {
         this.world = loc.getWorld().getName();
     }
 
+    //Check whether home is obsolete. Homes get marked as obsolete if the world they were in no longer exists, here obsolete basically means: marked for removal.
     public boolean isObsolete(){
         return obsolete;
     }
 
+    //Tries to find the actual world on the server that this home is tied to, by using the world name that is stored
+    //Will mark a home as obsolete if no such world can be found, returns the default world in this case
     public World getBukkitWorld(){
         World w = null;
         for(int i = 0; i < Bukkit.getWorlds().size() ; i++) {
@@ -209,6 +212,7 @@ public class HomeInfo {
         return w;
     }
 
+    //equals...
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -227,6 +231,7 @@ public class HomeInfo {
                 Arrays.equals(invites, homeInfo.invites);
     }
 
+    //hashcode...
     @Override
     public int hashCode() {
         return Objects.hash(name, x, y, z, yaw, pitch, world, Id, invitesArrayList, obsolete, invites);

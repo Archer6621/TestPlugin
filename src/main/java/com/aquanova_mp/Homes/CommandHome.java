@@ -23,6 +23,7 @@ public class CommandHome implements CommandExecutor {
     private List<HomeInfo> data;
     private Player player;
 
+    // TODO: 08-Apr-16 Get rid of this crap after subcommand implementation (or rather, make it an array of subcommands)
     private boolean blackListed(String string) {
         boolean blackListed = false;
         String[] blackList = {"help", "ilist", "clear", "invite", "uninvite", "clear", "version", "tp", "edit","info","list"};
@@ -38,11 +39,13 @@ public class CommandHome implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        //Note that there is no console usage support yet, coming soon // TODO: 08-Apr-16 Add console support for administrative tasks
         if (sender instanceof Player) {
 
             player = (Player) sender;
             data = homes.getData();
 
+            //Below are all if-else cases for handling subcommmands, to be replaced with actual subcommand class to neaten things up //// TODO: 08-Apr-16 Create subcommand class
             if (!(data == null) && !(player == null)) {
                 if (args.length == 0 && permCheckPlayer("homes.tp.self")) {
 
@@ -79,7 +82,7 @@ public class CommandHome implements CommandExecutor {
                         version();
                     }
 
-                    // /home tp <player>
+                    // /home tp <player>  (this is needed in case a player has a name that is one of the subcommands)
                     else if (args[0].equals("tp") && permCheckPlayer("homes.tp.other")) {
                         if ((args.length == 2))
                             homeOther(args[1]);
@@ -143,6 +146,7 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Teleports a player to his home, also sends the necessary messages for this
     public boolean home() {
         HomeInfo home = getHome(player);
         if (!(home == null)) {
@@ -160,6 +164,8 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Teleports a player to another's home, if invited (this check is bypassed if the player has admin rights)
+    //Will mark a home as obsolete and delete it if the world it was in no longer exists
     public boolean homeOther(String other) {
 
         if (other.equalsIgnoreCase(player.getName())) {
@@ -170,8 +176,7 @@ public class CommandHome implements CommandExecutor {
         HomeInfo otherHome = getHome(other);
 
         if (!(otherHome == null)) {
-            String name = otherHome.getInviteName(player);
-            if (!(name == null) || permCheckSilent("homes.admin")) {
+            if (otherHome.isInvited(player) || permCheckSilent("homes.admin")) {
                 Location loc = otherHome.toLocation();
                 if (!otherHome.isObsolete()) {
                     player.teleport(loc);
@@ -196,6 +201,7 @@ public class CommandHome implements CommandExecutor {
     }
 
 
+    //Invites a specified player to the user's home, the player has to be online to retrieve the proper name/UUID combination (might change in the future) // TODO: 08-Apr-16 Request UUID from the web if possible
     public boolean invite(String other) {
 
         if (other.equalsIgnoreCase(player.getName())) {
@@ -226,6 +232,7 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Uninvites a player from the user's home
     public boolean uninvite(String other) {
 
         if (other.equalsIgnoreCase(player.getName())) {
@@ -255,6 +262,7 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Shows the user a list with players that are invited to his home
     public boolean ilist() {
         HomeInfo home = getHome(player);
 
@@ -267,6 +275,8 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Shows the user a list with homes the user is invited to
+    //Highly inefficient, might store this per home as a list or consider a tree datastructure for all homes for use at runtime //// TODO: 08-Apr-16 Make this crap more efficient
     public boolean list() {
         ArrayList<String> players = new ArrayList<String>();
         for (HomeInfo otherHome : data) {
@@ -279,22 +289,26 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Shows help to user
     public boolean help() {
         player.sendMessage(Messages.HOME_HELP.parse());
         return true;
     }
 
+    //Shows help to user along with additional admin help
     public boolean helpAdmin() {
         player.sendMessage(Messages.HOME_HELP.parse() + "\n\n" + Messages.HOME_HELP_ADMIN.parse());
         return true;
     }
 
-
+    //Sets the user's home
+    //Handled through separate class at the moment, but this will change soon // TODO: 08-Apr-16 Move sethome to this class
     public boolean set() {
         getServer().dispatchCommand(player, "sethome");
         return true;
     }
 
+    //Clears a player's home through name
     public boolean clear(String other) {
         HomeInfo home = getHome(other);
         if (!(home == null)) {
@@ -306,12 +320,14 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Clears a player's home through actual homeinfo object
     public boolean clear(HomeInfo home) {
         if (!(home == null))
             data.remove(home);
         return true;
     }
 
+    //Edits a player's home location
     public boolean edit(String other, String cx,String cy, String cz) {
         HomeInfo home = getHome(other);
         if (!(home==null)) {
@@ -334,6 +350,7 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Edits a player's home location, handles the case of the optional world argument
     public boolean editWorld(String other, String cx,String cy, String cz, String world) {
         HomeInfo home = getHome(other);
         if (!(home==null)) {
@@ -363,12 +380,14 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Shows the user the current version + website
     public boolean version() {
         player.sendMessage(Messages.HOMES_VERSION.parse(homes.getDescription().getVersion()));
         player.sendMessage(Messages.HOMES_SITE.parse(homes.getDescription().getWebsite()));
         return true;
     }
 
+    //Shows the user information regarding a certain player's home, if it exists // TODO: 08-Apr-16 Pretty this up a bit
     public boolean info(String other){
         HomeInfo home = getHome(other);
         if(!(home==null)){
@@ -382,6 +401,7 @@ public class CommandHome implements CommandExecutor {
         return true;
     }
 
+    //Associates a player with a home from the database, returns this home, or null if it does not exist
     public HomeInfo getHome(Player player) {
         HomeInfo home = null;
         for (int i = 0; i < data.size(); i++) {
@@ -392,6 +412,7 @@ public class CommandHome implements CommandExecutor {
         return home;
     }
 
+    //Associates a player's name with a home from the database, returns this home, or null if it does not exist
     public HomeInfo getHome(String playerName) {
         HomeInfo home = null;
         for (int i = 0; i < data.size(); i++) {
@@ -402,16 +423,7 @@ public class CommandHome implements CommandExecutor {
         return home;
     }
 
-    public boolean hasHome(Player player) {
-        boolean home = false;
-        for (int i = 0; i < data.size(); i++) {
-            if (player.getUniqueId().equals(UUID.fromString(data.get(i).getId()))) {
-                home = true;
-            }
-        }
-        return home;
-    }
-
+    //Permission checking with message sending
     public boolean permCheck(String permission) {
         boolean allowed = false;
         if (player.hasPermission(permission))
@@ -421,6 +433,7 @@ public class CommandHome implements CommandExecutor {
         return allowed;
     }
 
+    //Permission checking specific to regular players, implemented this because of issues with child permissions
     public boolean permCheckPlayer(String permission) {
         boolean allowed = false;
         if (player.hasPermission("homes.player") || player.hasPermission(permission))
@@ -430,6 +443,7 @@ public class CommandHome implements CommandExecutor {
         return allowed;
     }
 
+    //Silent permission checking (no message)
     public boolean permCheckSilent(String permission) {
         boolean allowed = false;
         if (player.hasPermission(permission))
@@ -437,27 +451,33 @@ public class CommandHome implements CommandExecutor {
         return allowed;
     }
 
+    //Send a message from Enum Messages to a player, replace the message's variable with parameter 'variable'
     public void sendOther(Player receiver, Messages message, String variable){
         receiver.sendMessage(message.parse(variable));
     }
 
+    //Send message without variables
     public void sendOther(Player receiver, Messages message){
         receiver.sendMessage(message.parse());
     }
 
+    //Send message to current user with variable
     public void sendPlayer(Messages message, String variable){
         player.sendMessage(message.parse(variable));
     }
 
+    //Send message to current user without variable
     public void sendPlayer(Messages message){
         player.sendMessage(message.parse());
     }
 
+    //Send message to current user with pre-determined variable (for usages) // TODO: 08-Apr-16 Remove this once subcommands are implemented
     public void sendUsage(Messages message){
         player.sendMessage(message.parse("<player>"));
     }
 
-    public boolean isCoordinate(String input){
+    //Checks whether something is a double, returns false if it's not
+    public boolean isDouble(String input){
         boolean isDouble = true;
         double d;
         try {
@@ -469,22 +489,15 @@ public class CommandHome implements CommandExecutor {
         return isDouble;
     }
 
+    //Same as isDouble but then for three values at a time, for instance... Coordinates.
     public boolean isCoordinates(String cx, String cy, String cz){
-        boolean isDouble = true;
-        double x;
-        double y;
-        double z;
-        try {
-            x = Double.parseDouble(cx);
-            y = Double.parseDouble(cy);
-            z = Double.parseDouble(cz);
-        }
-        catch (NumberFormatException e) {
-            isDouble = false;
-        }
-        return isDouble;
+        if(!isDouble(cx)){return false;}
+        if(!isDouble(cy)){return false;}
+        if(!isDouble(cz)){return false;}
+        return true;
     }
 
+    //Finds the world on the server that is associated to a name/String passed through parameter "world"
     public World getBukkitWorld(String world){
         World w = null;
 
