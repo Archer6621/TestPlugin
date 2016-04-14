@@ -1,5 +1,7 @@
 package com.aquanova_mp.Homes;
 
+import br.net.fabiozumbi12.RedProtect.API.RedProtectAPI;
+import br.net.fabiozumbi12.RedProtect.Region;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
@@ -30,25 +32,38 @@ public class CommandSetHome implements CommandExecutor {
 
         if(sender instanceof Player){
             Player player = (Player) sender;
+            Location loc = player.getLocation();
 
-            if(homes.resEnabled || !player.hasPermission("homes.admin")) {
-                Location loc = player.getLocation();
-                ClaimedResidence res = Residence.getResidenceManager().getByLoc(loc);
-                if (!(res == null)) {
+            if(!player.hasPermission("homes.admin")) {
 
-                    ResidencePermissions perms = res.getPermissions();
+                //Residence
+                if (homes.resEnabled) {
+                    ClaimedResidence res = Residence.getResidenceManager().getByLoc(loc);
+                    if (!(res == null)) {
+                        ResidencePermissions perms = res.getPermissions();
 
-                    String flag = "build";
+                        String flag = "build";
 
-                    boolean hasPermission = perms.playerHas(player.getName(), flag, true);
+                        boolean hasPermission = perms.playerHas(player.getName(), flag, true);
 
-                    if (!hasPermission) {
-                        player.sendMessage(Messages.RES_SETHOME_NOT_ALLOWED.parse(flag));
-                        return true;
+                        if (!hasPermission) {
+                            player.sendMessage(Messages.RES_SETHOME_NOT_ALLOWED.parse());
+                            return true;
+                        }
+                    }
+                }
+
+                //RedProtect
+                if (homes.redEnabled) {
+                    Region region = RedProtectAPI.getRegion(loc);
+                    if(!(region==null)){
+                        if (!region.canBuild(player)){
+                            player.sendMessage(Messages.RES_SETHOME_NOT_ALLOWED.parse());
+                            return true;
+                        }
                     }
                 }
             }
-
             if(!(player.getLocation()==null)) {
                 List<HomeInfo> data = homes.getData();
                 if(!(data==null)) {

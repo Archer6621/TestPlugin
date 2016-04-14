@@ -61,7 +61,7 @@ public enum Messages {
     HOME_EDIT_SUCCESS(              "Home edited successfully!"),
 
     //Residence
-    RES_SETHOME_NOT_ALLOWED(        "You need the %p flag in order to set your home here!"),
+    RES_SETHOME_NOT_ALLOWED(        "You need to be allowed to build in order to set your home here!"),
     RES_ENABLING(                   "Manually Enabling Residence!"),
     RES_ENABLED(                    "Successfully hooked into Residence!"),
     RES_DISABLED(                   "Residence NOT Installed, DISABLED!"),

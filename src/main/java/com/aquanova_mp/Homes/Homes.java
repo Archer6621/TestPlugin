@@ -26,8 +26,8 @@ public class Homes extends JavaPlugin {
 
     public ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
-    public ResidenceApi resAPI;
     public boolean resEnabled;
+    public boolean redEnabled;
 
 
     public List<HomeInfo> getData(){
@@ -37,6 +37,8 @@ public class Homes extends JavaPlugin {
     public void print(String text){
         console.sendMessage(text);
     }
+
+    private PluginManager pluginManager = getServer().getPluginManager();
 
     private void readData(){
         try {
@@ -110,16 +112,14 @@ public class Homes extends JavaPlugin {
             new File(this.getDataFolder().getPath()).mkdirs();
         }
 
-        PluginManager pm = getServer().getPluginManager();
-        Plugin p = pm.getPlugin("Residence");
+        Plugin p = pluginManager.getPlugin("Residence");
         if(p!=null)
         {
             if(!p.isEnabled())
             {
                 print(Messages.RES_ENABLING.parse());
-                pm.enablePlugin(p);
+                pluginManager.enablePlugin(p);
             }
-            resAPI = Residence.getAPI();
             resEnabled = true;
             print(Messages.RES_ENABLED.parse());
         }
@@ -140,4 +140,21 @@ public class Homes extends JavaPlugin {
         saveConfig();
         saveData();
     }
+
+
+
+    private boolean checkRP() {
+        Plugin redProtect = pluginManager.getPlugin("RedProtect");
+        if (redProtect != null) {
+            if(redProtect.isEnabled())
+                return true;
+            else {
+                pluginManager.enablePlugin(redProtect);
+                redEnabled = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
