@@ -1,3 +1,2 @@
-# TestPlugin
-Just for practice
-test
+# WinHomes
+WinDooM's own homes plugin
